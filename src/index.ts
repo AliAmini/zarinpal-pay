@@ -68,8 +68,8 @@ class zarinpal_pay {
         callback_url,
         metadata: [mobile, email],
       });
-      if (data.errors) {
-        return data.errors
+      if (data.errors?.length) {
+        throw new Error(`Payment error: ${JSON.stringify(data.errors)}`);
       }
       return {
         data: {
@@ -81,6 +81,7 @@ class zarinpal_pay {
     } catch (err:any) {
       console.log(err);
       console.log("============= Error =============");
+      throw err;
     }
   }
   async verify({ authority, amount }: VerifyType) {
@@ -96,13 +97,14 @@ class zarinpal_pay {
         amount,
         authority,
       });
-      if (data.errors) {
-        return data.errors
+      if (data.errors?.length) {
+        throw new Error(`Payment error: ${JSON.stringify(data.errors)}`);
       }
       return data;
     } catch (err) {
       console.log(err);
       console.log("============= Error =============");
+      throw err;
     }
   }
   async unverified() {
@@ -110,13 +112,14 @@ class zarinpal_pay {
       const { data } = await axios.post(this._unVerifiedLink, {
         merchant_id: this._merchant,
       });
-      if (data.errors) {
-        return data.errors
+      if (data.errors?.length) {
+        throw new Error(`Payment error: ${JSON.stringify(data.errors)}`);
       }
       return data;
     } catch (err) {
       console.log(err);
       console.log("============= Error =============");
+      throw err;
     }
   }
 }
